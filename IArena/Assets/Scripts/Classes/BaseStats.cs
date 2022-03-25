@@ -14,20 +14,20 @@ public class BaseStats: MonoBehaviour {
     public int Vision { get => vision; }
 
     public void BuffStat(Equipment equipment) {
-        // switch (equipment.Stat)
-        // {
-        //     case Collectable.IncreasesStat.Attack:
-        //         this.attack += equipment.Value;
-        //         break;
-        //     case Collectable.IncreasesStat.Speed:
-        //         this.speed += equipment.Value;
-        //         break;       
-        //     case Collectable.IncreasesStat.Vision:
-        //         this.vision += equipment.Value;
-        //         break;       
-        //     default:
-        //         break;
-        // }
+        switch (equipment.Stat)
+        {
+            case Equipment.IncreasesStat.Attack:
+                this.attack += equipment.Buff;
+                break;
+            case Equipment.IncreasesStat.Speed:
+                this.speed += equipment.Buff;
+                break;       
+            case Equipment.IncreasesStat.Vision:
+                this.vision += equipment.Buff;
+                break;       
+            default:
+                break;
+        }
     }
 
     public void BalanceStats() {

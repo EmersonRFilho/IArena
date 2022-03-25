@@ -51,7 +51,7 @@ namespace BaseCharacter{
 
         private void RestoreHealth(HealCommand _command) {
             backpack.Remove(_command.Food);
-            // stats.HealHurt(_command.Food.Value);
+            stats.HealHurt(_command.Food.HealAmmount);
         }
 
         private void AddScore(CollectCommand _command) {

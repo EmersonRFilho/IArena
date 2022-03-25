@@ -1,8 +1,11 @@
-using BaseCharacter;
+using UnityEngine;
 using Commands;
 
 public class Treasure : Collectable
 {
+    [SerializeField] private int value;
+
+    public int Value { get => value; }
 
     public override void Collect(CollectCommand _command)
     {

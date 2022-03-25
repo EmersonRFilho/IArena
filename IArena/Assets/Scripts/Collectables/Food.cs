@@ -5,6 +5,8 @@ public class Food : Collectable
 {
     [SerializeField] private int healAmmount;
 
+    public int HealAmmount { get => healAmmount; }
+
     public override void Collect(CollectCommand _command)
     {
         gameObject.SetActive(false);
