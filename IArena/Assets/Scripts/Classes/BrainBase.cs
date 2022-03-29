@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Commands;
 
-public abstract class BrainBase : MonoBehaviour {
+public class BrainBase : MonoBehaviour {
     [SerializeField] protected CharacterBehaviors chara = null;
     protected List<Transform> objectsInRange = new List<Transform>();
 
@@ -11,11 +11,13 @@ public abstract class BrainBase : MonoBehaviour {
     }
 
     protected void GetVision() {
+        objectsInRange.Clear();
         Collider2D[] found = Physics2D.OverlapCircleAll(chara.transform.position, chara.getVisionRange(), chara.Detectable);
         foreach (Collider2D item in found)
         {
-            if (item.transform != transform)
-            objectsInRange.Add(item.transform);
+            if (item.transform != transform){
+                objectsInRange.Add(item.transform);
+            }
         }
     }
 
@@ -26,15 +28,17 @@ public abstract class BrainBase : MonoBehaviour {
         command.Execute();
     }
 
+    protected void EatFood(Food food) {
+        HealCommand command = new HealCommand(chara, food);
+        //send command to event queue
+        //execute command
+        command.Execute();
+    }
+
     protected void Attack(CharacterBehaviors target, Weapon weapon) {
         AttackCommand command = new AttackCommand(chara, target, weapon);
         // send command to event queue
         // execute command
         command.Execute();
-    }
-
-    protected void EatFood(Food food) {
-        //send command to event queue
-        //execute command
     }
 }

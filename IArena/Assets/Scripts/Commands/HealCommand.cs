@@ -18,7 +18,10 @@ namespace Commands
 
         public void Execute()
         {
-            food.SendMessage("Consume", this);
+            if (self.getBackpack().Contains(food)) {
+                food.SendMessage("Consume", this);
+                // self.SendMessage("RestoreHealth", this);
+            }
         }
 
         public void Undo()

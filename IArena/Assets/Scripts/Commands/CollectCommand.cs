@@ -40,6 +40,7 @@ namespace Commands
                     break;
             }
             item.Collect(this);
+            // item.SendMessage("Collect", this);
         }
 
         public void Undo()

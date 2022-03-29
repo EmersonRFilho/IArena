@@ -9,6 +9,7 @@ public class Treasure : Collectable
 
     public override void Collect(CollectCommand _command)
     {
+        hitbox.enabled = false;
         gameObject.SetActive(false);
     }
 

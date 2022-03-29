@@ -29,6 +29,7 @@ public class Weapon : Collectable
     {
         //range check
         if(GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) {
+            hitbox.enabled = false;
             gameObject.SetActive(false);
         }
     }

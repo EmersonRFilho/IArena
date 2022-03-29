@@ -6,15 +6,17 @@ namespace BaseCharacter{
     public abstract class Chara : MonoBehaviour
     {
         private bool isDead;
-        private int score;
+        [SerializeField] private int score;
 
         private BaseStats stats;
         
         public bool IsDead { get => isDead; }
+        public int Score { get => score; }
 
         private Weapon weapon;
 
         private List<Collectable> backpack = new List<Collectable>();
+        private float hungerTimer = 0f;
 
         private void Awake() {
             stats = GetComponent<BaseStats>();
@@ -24,14 +26,20 @@ namespace BaseCharacter{
         // Start is called before the first frame update
         void Start()
         {
-            // if(target == null)
-            //     target = FindObjectOfType<Collectable>().transform;
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            if (stats.Hunger > 0) {
+                hungerTimer += Time.deltaTime;
+                if (hungerTimer > 10) {
+                    hungerTimer = 0f;
+                    stats.Eat(-1);
+                    print(stats.Hunger);
+                }
+            }
         }
 
         private void EquipItem(CollectCommand _command) {
@@ -50,27 +58,24 @@ namespace BaseCharacter{
         }
 
         private void RestoreHealth(HealCommand _command) {
+            print("eating food");
             backpack.Remove(_command.Food);
             stats.HealHurt(_command.Food.HealAmmount);
+            stats.Eat(10 - stats.Hunger);
         }
 
         private void AddScore(CollectCommand _command) {
-            try
-            {
                 Treasure treasure = _command.Item.GetComponent<Treasure>();
-                // this.score += treasure.Value;
+                this.score += treasure.Value;
                 backpack.Add(treasure);
                 print(score);
-            } catch {
-                print("not a treasure");
-            }
         }
 
         private void CollectWeapon(CollectCommand _command) {
             if(weapon){
-                weapon.Drop(_command);
-                weapon = (Weapon) _command.Item;
+                weapon.SendMessage("Drop", _command);
             }
+            weapon = (Weapon) _command.Item;
         }
 
         public List<Collectable> getBackpack() {

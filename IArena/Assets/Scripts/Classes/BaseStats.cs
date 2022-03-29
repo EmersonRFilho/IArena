@@ -1,7 +1,7 @@
 using UnityEngine;
 public class BaseStats: MonoBehaviour {
     private int health = 20;
-    private int sanity = 10;
+    // private int sanity = 10;
     [SerializeField]private int attack;
     [SerializeField]private int speed;
     [SerializeField]private int vision = 10;
@@ -12,6 +12,7 @@ public class BaseStats: MonoBehaviour {
     public int Attack { get => attack; }
     public int Speed { get => speed; }
     public int Vision { get => vision; }
+    public int Hunger { get => hunger; }
 
     public void BuffStat(Equipment equipment) {
         switch (equipment.Stat)

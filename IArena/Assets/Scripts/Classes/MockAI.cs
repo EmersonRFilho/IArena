@@ -9,9 +9,11 @@ public class MockAI: BrainBase {
     }
 
     private void Update() {
+        GetVision();
         if (target == null) {
-            GetVision();
-            target = objectsInRange[0];
+            if (objectsInRange.Count > 0) {
+                target = objectsInRange[0];
+            }
         } else {
             transform.position = Vector2.MoveTowards(
                 transform.position,
@@ -21,8 +23,9 @@ public class MockAI: BrainBase {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other == target && other.gameObject.layer == 6) {
+        if(other.transform == target && other.gameObject.layer == LayerMask.NameToLayer("Collectable")) {
             Collect(other.GetComponent<Collectable>());
+            target = null;
         }
     }
 }
