@@ -1,3 +1,4 @@
+using UnityEngine;
 namespace Commands
 {
     public class AttackCommand : ICommand
@@ -19,10 +20,13 @@ namespace Commands
 
         public void Execute()
         {
-            // Check Range
-                // Check Attack Speed
-                    //deal damage
-            target.SendMessage("TakeDamage", this);
+            if (self.IsDead) return;
+            // Check Range and attack speed
+            if (Vector2.Distance(self.transform.position, target.transform.position)
+                <= weapon.Range && weapon.CanAttack) {
+                // deal damage
+                weapon.Attack(this);
+            }
         }
 
         public void Undo()

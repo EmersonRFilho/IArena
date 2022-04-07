@@ -40,7 +40,7 @@ public class Weapon : Collectable
         gameObject.SetActive(true);
     }
 
-    private void attack(AttackCommand _command) {
+    public void Attack(AttackCommand _command) {
         if(Vector2.Distance(_command.Self.transform.position, _command.Target.transform.position) <= range) {
             attackTime = 0;
             _command.Target.SendMessage("TakeDamage", _command);

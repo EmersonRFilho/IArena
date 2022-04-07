@@ -9,17 +9,33 @@ public class MockAI: BrainBase {
     }
 
     private void Update() {
+        if (chara.IsDead) return;
         GetVision();
-        if (target == null) {
-            if (objectsInRange.Count > 0) {
-                target = objectsInRange[0];
-            }
-        } else {
+        if (objectsInRange.Count > 0) {
+            closest();
+            target = objectsInRange[0];
+        }
+        if (target != null)
+        {
             transform.position = Vector2.MoveTowards(
                 transform.position,
                 target.position,
                 chara.GetSpeed() * Time.deltaTime);
         }
+        if ((chara.GetHealth() < 3
+            || chara.GetHunger() < 7) && chara.FoodBag.Count != 0) {
+            EatFood(chara.FoodBag[0]);
+        }
+        if (target.gameObject.layer == LayerMask.NameToLayer("Player")) {
+            if (Vector2.Distance(transform.position, target.position) > chara.Weapon.Range) {
+                transform.position = Vector2.MoveTowards(transform.position, target.position, chara.GetSpeed() * Time.deltaTime);
+            } else {
+                Attack(target.GetComponent<CharacterBehaviors>(), chara.Weapon);
+            }
+            if (target.GetComponent<CharacterBehaviors>().IsDead) {
+                target = null;
+            }
+        } 
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -27,5 +43,9 @@ public class MockAI: BrainBase {
             Collect(other.GetComponent<Collectable>());
             target = null;
         }
+    }
+
+    void closest() {
+        objectsInRange.Sort((x, y) => Vector2.Distance(transform.position, x.position).CompareTo(Vector2.Distance(transform.position, y.position)));
     }
 }

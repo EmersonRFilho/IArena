@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Commands;
+using System;
 
 namespace BaseCharacter{
     public abstract class Chara : MonoBehaviour
@@ -12,13 +13,22 @@ namespace BaseCharacter{
         
         public bool IsDead { get => isDead; }
         public int Score { get => score; }
+        public List<Food> FoodBag { get => foodBag; }
+        public List<Collectable> Backpack { get => backpack; }
+        public Weapon Weapon { get => weapon; }
 
+        private Rigidbody2D rigid;
+        private Collider2D col;
+        private SpriteRenderer spriteRenderer;
         private Weapon weapon;
-
+        private List<Food> foodBag = new List<Food>();
         private List<Collectable> backpack = new List<Collectable>();
         private float hungerTimer = 0f;
 
         private void Awake() {
+            rigid = GetComponent<Rigidbody2D>();
+            col = GetComponent<Collider2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
             stats = GetComponent<BaseStats>();
             stats.BalanceStats();
         }
@@ -32,6 +42,7 @@ namespace BaseCharacter{
         // Update is called once per frame
         void Update()
         {
+            if (isDead) return;
             if (stats.Hunger > 0) {
                 hungerTimer += Time.deltaTime;
                 if (hungerTimer > 10) {
@@ -39,7 +50,21 @@ namespace BaseCharacter{
                     stats.Eat(-1);
                     print(stats.Hunger);
                 }
+            } else {
+                KillPlayer();
             }
+            if (stats.Health <= 0) {
+                stats.HealHurt(-stats.Health);
+                KillPlayer();
+            }
+        }
+
+        private void KillPlayer()
+        {
+            isDead = true;
+            rigid.bodyType = RigidbodyType2D.Static;
+            col.enabled = false;
+            spriteRenderer.color = Color.gray;
         }
 
         private void EquipItem(CollectCommand _command) {
@@ -48,7 +73,7 @@ namespace BaseCharacter{
         }
 
         private void StoreFood(CollectCommand _command) {
-            backpack.Add(_command.Item);
+            foodBag.Add((Food) _command.Item);
         }
 
         private void TakeDamage(AttackCommand _command) {
@@ -59,7 +84,7 @@ namespace BaseCharacter{
 
         private void RestoreHealth(HealCommand _command) {
             print("eating food");
-            backpack.Remove(_command.Food);
+            foodBag.Remove(_command.Food);
             stats.HealHurt(_command.Food.HealAmmount);
             stats.Eat(10 - stats.Hunger);
         }
@@ -78,12 +103,6 @@ namespace BaseCharacter{
             weapon = (Weapon) _command.Item;
         }
 
-        public List<Collectable> getBackpack() {
-            if (isDead)
-                return backpack;
-            return null;
-        }
-
         #region Getters/Setters
         public int GetAttack() {
             return stats.Attack;
@@ -95,8 +114,12 @@ namespace BaseCharacter{
             return stats.Health;
         }
 
-        public int getVisionRange() {
+        public int GetVisionRange() {
             return stats.Vision;
+        }
+
+        public int GetHunger() {
+            return stats.Hunger;
         }
         #endregion
     }

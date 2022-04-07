@@ -18,6 +18,7 @@ namespace Commands
 
         public void Execute()
         {
+            if (self.IsDead) return;
             switch (item.Type)
             {
                 case Collectable.CollectableType.treasure:

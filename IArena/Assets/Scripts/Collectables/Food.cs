@@ -19,8 +19,8 @@ public class Food : Collectable
         gameObject.SetActive(true);
     }
 
-    private void Consume(HealCommand _command) {
+    public void Consume(HealCommand _command) {
         gameObject.SetActive(false);
-        _command.Self.SendMessage("RestoreHealth", _command);
+        // _command.Self.SendMessage("RestoreHealth", _command);
     }
 }
