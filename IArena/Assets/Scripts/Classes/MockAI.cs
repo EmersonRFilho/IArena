@@ -3,6 +3,7 @@ using UnityEngine;
 public class MockAI: BrainBase {
 
     Transform target = null;
+    CharacterBehaviors enemy;
 
     private void Start() {
         
@@ -17,19 +18,15 @@ public class MockAI: BrainBase {
         }
         if (target != null)
         {
-            transform.position = Vector2.MoveTowards(
-                transform.position,
-                target.position,
-                chara.GetSpeed() * Time.deltaTime);
+            MoveTo(target);
         }
         if ((chara.GetHealth() < 3
             || chara.GetHunger() < 7) && chara.FoodBag.Count != 0) {
             EatFood(chara.FoodBag[0]);
         }
-        if (target.gameObject.layer == LayerMask.NameToLayer("Player")) {
-            if (Vector2.Distance(transform.position, target.position) > chara.Weapon.Range) {
-                transform.position = Vector2.MoveTowards(transform.position, target.position, chara.GetSpeed() * Time.deltaTime);
-            } else {
+        if (target && target.gameObject.layer == LayerMask.NameToLayer("Player")) {
+            if (Vector2.Distance(transform.position, target.position) <= chara.Weapon.Range)
+            {
                 Attack(target.GetComponent<CharacterBehaviors>(), chara.Weapon);
             }
             if (target.GetComponent<CharacterBehaviors>().IsDead) {

@@ -18,15 +18,11 @@ namespace Commands
         public CharacterBehaviors Target { get => target; }
         public Weapon Weapon { get => weapon; }
 
-        public void Execute()
+        public async void Execute()
         {
             if (self.IsDead) return;
-            // Check Range and attack speed
-            if (Vector2.Distance(self.transform.position, target.transform.position)
-                <= weapon.Range && weapon.CanAttack) {
-                // deal damage
-                weapon.Attack(this);
-            }
+            // deal damage
+            await weapon.Attack(this);
         }
 
         public void Undo()

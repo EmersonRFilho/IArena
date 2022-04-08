@@ -1,28 +1,23 @@
 using UnityEngine;
 using Commands;
+using System.Threading.Tasks;
+using System;
 
 public class Weapon : Collectable
 {
     [SerializeField] private int damage;
     [SerializeField] private float cooldown;
     [SerializeField] private float range;
-    private float attackTime;
-    private bool canAttack;
+    [SerializeField] private float attackTime;
+    private bool attacked;
 
-    public bool CanAttack { get => canAttack; }
+    public bool Attacked { get => attacked; }
     public int Damage { get => damage; }
     public float Cooldown { get => cooldown; }
     public float Range { get => range; }
 
     private void Start() {
-        // GetComponent<SpriteRenderer>().sprite = weaponData.Sprite;
-        attackTime = cooldown;
-    }
-    private void Update() {
-        canAttack = attackTime >= cooldown;
-        if(attackTime < cooldown) {
-            attackTime += Time.deltaTime;
-        }
+        
     }
 
     public override void Collect(CollectCommand _command)
@@ -31,6 +26,7 @@ public class Weapon : Collectable
         if(GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) {
             hitbox.enabled = false;
             gameObject.SetActive(false);
+            // transform.position = new Vector2(transform.position.x + 10000, transform.position.y + 10000);
         }
     }
 
@@ -40,10 +36,24 @@ public class Weapon : Collectable
         gameObject.SetActive(true);
     }
 
-    public void Attack(AttackCommand _command) {
-        if(Vector2.Distance(_command.Self.transform.position, _command.Target.transform.position) <= range) {
-            attackTime = 0;
+    public async Task Attack(AttackCommand _command) {
+        float distance = Vector2.Distance(_command.Self.transform.position, _command.Target.transform.position);
+        // print(String.Format("distance from {0} to {1}: {2}", _command.Self.name, _command.Target.name, distance));
+        if(distance <= range && !attacked) {
+            attacked = true;
+            Rigidbody2D selfRigid = _command.Self.GetComponent<Rigidbody2D>();
+            selfRigid.constraints = RigidbodyConstraints2D.FreezePosition;
+            await Task.Delay((int) attackTime*1000);
+            if (_command.Self.IsDead) return;
+            print("dealt damage to " + _command.Target.name);
             _command.Target.SendMessage("TakeDamage", _command);
+            AttackTimer();
+            await Task.Yield();
         }
+    }
+    private async Task AttackTimer() {
+        await Task.Delay((int) cooldown * 1000);
+        attacked = false;
+        await Task.Yield();
     }
 }

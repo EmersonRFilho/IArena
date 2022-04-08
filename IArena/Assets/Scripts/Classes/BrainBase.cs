@@ -13,13 +13,21 @@ public abstract class BrainBase : MonoBehaviour {
     protected void GetVision() {
         if (chara.IsDead) return;
         objectsInRange.Clear();
-        Collider2D[] found = Physics2D.OverlapCircleAll(chara.transform.position, chara.GetVisionRange(), chara.Detectable);
+        Collider2D[] found = Physics2D.OverlapCircleAll(transform.position, chara.GetVisionRange(), chara.Detectable);
         foreach (Collider2D item in found)
         {
             if (item.transform != transform) {
                 objectsInRange.Add(item.transform);
             }
         }
+    }
+
+    protected void MoveTo(Transform target) {
+        if (chara.IsDead) return;
+        transform.position = Vector2.MoveTowards(
+            transform.position,
+            target.position,
+            chara.GetSpeed() * Time.deltaTime);
     }
 
     protected void Collect(Collectable item) {

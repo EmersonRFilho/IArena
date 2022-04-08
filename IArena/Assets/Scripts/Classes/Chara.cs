@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Commands;
-using System;
 
 namespace BaseCharacter{
     public abstract class Chara : MonoBehaviour
@@ -20,7 +19,7 @@ namespace BaseCharacter{
         private Rigidbody2D rigid;
         private Collider2D col;
         private SpriteRenderer spriteRenderer;
-        private Weapon weapon;
+        [SerializeField] private Weapon weapon;
         private List<Food> foodBag = new List<Food>();
         private List<Collectable> backpack = new List<Collectable>();
         private float hungerTimer = 0f;
@@ -36,7 +35,7 @@ namespace BaseCharacter{
         // Start is called before the first frame update
         void Start()
         {
-            
+
         }
 
         // Update is called once per frame
@@ -98,7 +97,8 @@ namespace BaseCharacter{
 
         private void CollectWeapon(CollectCommand _command) {
             if(weapon){
-                weapon.SendMessage("Drop", _command);
+                // weapon.SendMessage("Drop", _command);
+                weapon.Drop(_command);
             }
             weapon = (Weapon) _command.Item;
         }
