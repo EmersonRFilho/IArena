@@ -3,9 +3,15 @@ using Commands;
 
 public class Treasure : Collectable
 {
-    [SerializeField] private int value;
+    [SerializeField] private int value = 50;
 
     public int Value { get => value; }
+
+    protected override void Awake() 
+    {
+        base.Awake();
+        setType(CollectableType.treasure);
+    }
 
     public override void Collect(CollectCommand _command)
     {

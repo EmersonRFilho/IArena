@@ -27,7 +27,7 @@ public class MockAI: BrainBase {
         if (target && target.gameObject.layer == LayerMask.NameToLayer("Player")) {
             if (Vector2.Distance(transform.position, target.position) <= chara.Weapon.Range)
             {
-                Attack(target.GetComponent<CharacterBehaviors>(), chara.Weapon);
+                Attack(target.GetComponent<CharacterBehaviors>());
             }
             if (target.GetComponent<CharacterBehaviors>().IsDead) {
                 target = null;

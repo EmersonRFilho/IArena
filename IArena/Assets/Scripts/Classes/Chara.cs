@@ -77,7 +77,7 @@ namespace BaseCharacter{
 
         private void TakeDamage(AttackCommand _command) {
             CharacterBehaviors _attacker = _command.Self;
-            Weapon _weapon = _command.Weapon;
+            Weapon _weapon = _command.Self.Weapon;
             stats.HealHurt((_weapon.Damage + _attacker.GetAttack())*-1);
         }
 

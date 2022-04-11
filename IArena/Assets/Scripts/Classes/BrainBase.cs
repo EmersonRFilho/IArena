@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Commands;
 
+[RequireComponent(typeof(CharacterBehaviors))]
 public abstract class BrainBase : MonoBehaviour {
     [SerializeField] protected CharacterBehaviors chara = null;
     protected List<Transform> objectsInRange = new List<Transform>();
@@ -46,9 +47,9 @@ public abstract class BrainBase : MonoBehaviour {
         command.Execute();
     }
 
-    protected void Attack(CharacterBehaviors target, Weapon weapon) {
+    protected void Attack(CharacterBehaviors target) {
         if (chara.IsDead) return;
-        AttackCommand command = new AttackCommand(chara, target, weapon);
+        AttackCommand command = new AttackCommand(chara, target);
         // send command to event queue
         // execute command
         command.Execute();

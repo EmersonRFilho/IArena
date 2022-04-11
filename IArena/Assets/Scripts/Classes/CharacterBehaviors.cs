@@ -1,5 +1,9 @@
 using UnityEngine;
 using BaseCharacter;
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(BaseStats))]
 public class CharacterBehaviors: Chara {
     [SerializeField] private LayerMask detectable;
 

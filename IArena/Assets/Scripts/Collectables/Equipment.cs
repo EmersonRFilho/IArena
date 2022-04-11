@@ -6,6 +6,11 @@ public class Equipment : Collectable
     [SerializeField]private int buff;
     [SerializeField]private IncreasesStat stat;
 
+    protected override void Awake() {
+        base.Awake();
+        setType(CollectableType.equipment);
+    }
+
     public int Buff { get => buff; }
     public IncreasesStat Stat { get => stat; }
 

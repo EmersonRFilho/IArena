@@ -4,7 +4,7 @@ using Commands;
 public abstract class Collectable : MonoBehaviour,ICollectable {
     
     // [SerializeField] private int value;
-    [SerializeField] private CollectableType type;
+    private CollectableType type;
     protected Collider2D hitbox;
 
     // public int Value { get => value; }
@@ -13,7 +13,7 @@ public abstract class Collectable : MonoBehaviour,ICollectable {
     public abstract void Collect(CollectCommand _command);
     public abstract void Drop(CollectCommand _command);
 
-    private void Awake() {
+    protected virtual void Awake() {
         hitbox = GetComponent<Collider2D>();
     }
 
@@ -25,6 +25,10 @@ public abstract class Collectable : MonoBehaviour,ICollectable {
     //     transform.position = _command.Self.transform.position;
     //     gameObject.SetActive(true);
     // }
+
+    protected void setType(CollectableType type) {
+        this.type = type;
+    }
 
     public enum CollectableType
     {

@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class Food : Collectable
 {
-    [SerializeField] private int healAmmount;
+    [SerializeField] private int healAmmount = 10;
+
+    protected override void Awake() {
+        base.Awake();
+        setType(CollectableType.food);
+    }
 
     public int HealAmmount { get => healAmmount; }
 

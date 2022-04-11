@@ -16,18 +16,19 @@ public class Weapon : Collectable
     public float Cooldown { get => cooldown; }
     public float Range { get => range; }
 
-    private void Start() {
-        
+    protected override void Awake() {
+        base.Awake();
+        setType(CollectableType.weapon);
     }
 
     public override void Collect(CollectCommand _command)
     {
         //range check
-        if(GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) {
+        // if(GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) {
             hitbox.enabled = false;
             gameObject.SetActive(false);
             // transform.position = new Vector2(transform.position.x + 10000, transform.position.y + 10000);
-        }
+        // }
     }
 
     public override void Drop(CollectCommand _command)
@@ -45,8 +46,8 @@ public class Weapon : Collectable
             selfRigid.constraints = RigidbodyConstraints2D.FreezePosition;
             await Task.Delay((int) attackTime*1000);
             if (_command.Self.IsDead) return;
-            print("dealt damage to " + _command.Target.name);
             _command.Target.SendMessage("TakeDamage", _command);
+            print("dealt damage to " + _command.Target.name);
             AttackTimer();
             await Task.Yield();
         }
