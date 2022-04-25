@@ -1,14 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Commands;
+using Movement;
+using Core;
 
 [RequireComponent(typeof(CharacterBehaviors))]
+[RequireComponent(typeof(SteeringBehaviourBase))]
 public abstract class BrainBase : MonoBehaviour {
     [SerializeField] protected CharacterBehaviors chara = null;
+    private SteeringBehaviourBase movement;
     protected List<Transform> objectsInRange = new List<Transform>();
 
-    private void Awake() {
+    private void Start() {
         chara = GetComponent<CharacterBehaviors>();
+        movement = GetComponent<SteeringBehaviourBase>();
+        movement.MaxAcceleration = chara.GetSpeed();
     }
 
     protected void GetVision() {
@@ -23,12 +29,11 @@ public abstract class BrainBase : MonoBehaviour {
         }
     }
 
-    protected void MoveTo(Transform target) {
-        if (chara.IsDead) return;
-        transform.position = Vector2.MoveTowards(
-            transform.position,
-            target.position,
-            chara.GetSpeed() * Time.deltaTime);
+    protected void SetMovementBehaviours(bool clear = true, params Steering[] behaviours) {
+        if (clear) movement.Steerings.Clear();
+        foreach(Steering behaviour in behaviours) {
+            movement.Steerings.Add(behaviour);
+        }
     }
 
     protected void Collect(Collectable item) {

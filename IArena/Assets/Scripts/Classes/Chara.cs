@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Commands;
 
-namespace BaseCharacter{
+namespace Core{
     public abstract class Chara : MonoBehaviour
     {
         private bool isDead;

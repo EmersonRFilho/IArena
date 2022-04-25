@@ -1,4 +1,4 @@
-using BaseCharacter;
+using Core;
 namespace Commands
 {
     public class CollectCommand : ICommand

@@ -1,5 +1,5 @@
 using UnityEngine;
-using BaseCharacter;
+using Core;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
