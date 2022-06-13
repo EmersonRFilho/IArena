@@ -27,7 +27,7 @@ namespace Core{
         private void Awake() {
             rigid = GetComponent<Rigidbody2D>();
             col = GetComponent<Collider2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             stats = GetComponent<BaseStats>();
             stats.BalanceStats();
         }

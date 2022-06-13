@@ -6,7 +6,7 @@ using Core;
 
 [RequireComponent(typeof(CharacterBehaviors))]
 [RequireComponent(typeof(SteeringBehaviourBase))]
-public abstract class BrainBase : MonoBehaviour {
+public class BrainBase : MonoBehaviour {
     [SerializeField] protected CharacterBehaviors chara = null;
     private SteeringBehaviourBase movement;
     protected List<Transform> objectsInRange = new List<Transform>();
@@ -26,10 +26,14 @@ public abstract class BrainBase : MonoBehaviour {
             if (item.transform != transform) {
                 objectsInRange.Add(item.transform);
             }
+            if (item.gameObject.layer == LayerMask.NameToLayer("Player") && item.GetComponent<Chara>().IsDead) {
+                objectsInRange.Remove(item.transform);
+            }
         }
     }
 
     protected void SetMovementBehaviours(bool clear = true, params Steering[] behaviours) {
+        if (chara.IsDead) return;
         if (clear) movement.Steerings.Clear();
         foreach(Steering behaviour in behaviours) {
             movement.Steerings.Add(behaviour);

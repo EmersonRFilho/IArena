@@ -8,6 +8,7 @@ namespace Movement {
         private float wanderOffset = 1.5f;
         private float wanderRadius = 4f;
         private float wanderOrientation = 0f;
+        Vector3 targetPosition;
 
         public WanderBehaviour(float wanderRate, float wanderOffset, float wanderRadius, float weight)
         {
@@ -25,17 +26,22 @@ namespace Movement {
         }
         public override SteeringData GetSteering(SteeringBehaviourBase steeringBase)
         {
+            Rigidbody2D rigid = steeringBase.GetComponent<Rigidbody2D>();
             SteeringData steering = new SteeringData();  
             wanderOrientation += RandomBinomial() * wanderRate;  
-            float characterOrientation = steeringBase.transform.rotation.eulerAngles.z * Mathf.Deg2Rad;  
-            float targetOrientation = wanderOrientation + characterOrientation;  
-            Vector3 targetPosition = steeringBase.transform.position + (wanderOffset *  
-            OrientationToVector(characterOrientation));  
+            float characterOrientation = steeringBase.transform.rotation.eulerAngles.z * Mathf.Deg2Rad; 
+            float targetOrientation = wanderOrientation + characterOrientation;
+            targetPosition = steeringBase.transform.position + (wanderOffset * OrientationToVector(characterOrientation));  
             targetPosition += wanderRadius * OrientationToVector(targetOrientation);  
             steering.Linear = targetPosition - steeringBase.transform.position;  
             steering.Linear.Normalize();  
-            steering.Linear *= steeringBase.MaxAcceleration;  
+            steering.Linear *= steeringBase.MaxAcceleration;
             return steering;
+        }
+
+        private void OnDrawGizmos() {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(targetPosition, 1);
         }
     }
 }

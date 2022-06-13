@@ -8,6 +8,7 @@ using Commands;
 public class CommandsTests
 {
     private GameObject playerObject;
+    private GameObject enemyObject;
     private GameObject treasureObject;
     private GameObject weaponObject;
     private GameObject foodObject;
@@ -22,7 +23,8 @@ public class CommandsTests
         // playerObject.AddComponent<BaseStats>();
         // playerObject.AddComponent<BoxCollider2D>();
         // playerBrain = playerObject.AddComponent<BrainBase>();
-        playerObject = GameObject.Instantiate(Resources.Load<GameObject>("BaseObjects/PlayerBase"));
+        playerObject = GameObject.Instantiate(Resources.Load<GameObject>("BaseObjects/PlayerBase"), new Vector3(0,0,0), Quaternion.identity);
+        enemyObject = GameObject.Instantiate(Resources.Load<GameObject>("BaseObjects/PlayerBase"), new Vector3(1,0,0), Quaternion.identity);
 
         //collectables
         treasureObject = GameObject.Instantiate(new GameObject());
@@ -31,7 +33,7 @@ public class CommandsTests
         treasureObject.layer = LayerMask.NameToLayer("Collectable");
         trecol.isTrigger = true;
         
-        weaponObject = GameObject.Instantiate(new GameObject());
+        weaponObject = GameObject.Instantiate(new GameObject(), playerObject.transform.position, Quaternion.identity);
         var wepcol = weaponObject.AddComponent<BoxCollider2D>();
         var stats = weaponObject.AddComponent<Weapon>();
         weaponObject.layer = LayerMask.NameToLayer("Collectable");
@@ -106,12 +108,30 @@ public class CommandsTests
     public IEnumerator AttacksPlayer()
     {
         new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
-        int maxHealth = playerObject.GetComponent<CharacterBehaviors>().GetHealth();
+        int maxHealth = enemyObject.GetComponent<CharacterBehaviors>().GetHealth();
         new AttackCommand(
             playerObject.GetComponent<CharacterBehaviors>(),
+            enemyObject.GetComponent<CharacterBehaviors>()).Execute();
+        yield return new WaitForFixedUpdate();
+        Assert.Less(enemyObject.GetComponent<CharacterBehaviors>().GetHealth(), maxHealth);
+    }
+
+    [UnityTest]
+    public IEnumerator SimultaneousAttacks() {
+        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
+        int playerMaxHealth = playerObject.GetComponent<CharacterBehaviors>().GetHealth();
+        GameObject fists = (GameObject) GameObject.Instantiate(Resources.Load("Weapons/Dem Fists"), enemyObject.transform.position, Quaternion.identity);
+        new CollectCommand(enemyObject.GetComponent<CharacterBehaviors>(), fists.GetComponent<Collectable>()).Execute();
+        int enemyMaxHealth = enemyObject.GetComponent<CharacterBehaviors>().GetHealth();
+        new AttackCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            enemyObject.GetComponent<CharacterBehaviors>()).Execute();
+        new AttackCommand(
+            enemyObject.GetComponent<CharacterBehaviors>(),
             playerObject.GetComponent<CharacterBehaviors>()).Execute();
         yield return new WaitForFixedUpdate();
-        Assert.Less(playerObject.GetComponent<CharacterBehaviors>().GetHealth(), maxHealth);
+        Assert.Less(playerObject.GetComponent<CharacterBehaviors>().GetHealth(), playerMaxHealth);
+        Assert.Less(enemyObject.GetComponent<CharacterBehaviors>().GetHealth(), enemyMaxHealth);
     }
 
     [UnityTest]

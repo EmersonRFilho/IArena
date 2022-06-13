@@ -47,14 +47,20 @@ public class Weapon : Collectable
             await Task.Delay((int) attackTime*1000);
             if (_command.Self.IsDead) return;
             _command.Target.SendMessage("TakeDamage", _command);
-            print("dealt damage to " + _command.Target.name);
-            AttackTimer();
+            print(_command.Self.name + " dealt damage to " + _command.Target.name);
+            StartCoroutine("AttackTimer");
             await Task.Yield();
         }
     }
-    private async Task AttackTimer() {
-        await Task.Delay((int) cooldown * 1000);
+
+    IEnumerator AttackTimer() {
+        yield return new WaitForSeconds(cooldown);
         attacked = false;
-        await Task.Yield();
     }
+
+    // private async Task AttackTimer() {
+    //     await Task.Delay((int) cooldown * 1000);
+    //     attacked = false;
+    //     await Task.Yield();
+    // }
 }

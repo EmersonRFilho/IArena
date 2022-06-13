@@ -10,32 +10,36 @@ public class MockAI: BrainBase {
     private void Update() {
         if (chara.IsDead) return;
         GetVision();
-        SetMovementBehaviours(true, new WanderBehaviour(1.4f, 1.5f, 4f, 1f));
-        // if (objectsInRange.Count > 0 && target == null) {
-        //     closest(objectsInRange);
-        //     target = objectsInRange[0];
-        // }
-        // List<Transform> enemies = objectsInRange.FindAll(x => x.gameObject.layer == LayerMask.NameToLayer("Player"));
-        // if (enemies.Count > 0)
-        // {
-        //     closest(enemies);
-        //     enemy = enemies[0].GetComponent<CharacterBehaviors>();
-        //     if (Vector2.Distance(transform.position, enemy.transform.position) <= chara.Weapon.Range)
-        //     {
-        //         Attack(enemy.GetComponent<CharacterBehaviors>());
-        //     }
-        //     if (enemy.GetComponent<CharacterBehaviors>().IsDead) {
-        //         enemy = null;
-        //     }
-        //     float distance = Vector2.Distance(transform.position, enemy.transform.position);
-        //     SetMovementBehaviours(clear: true, new SeekBehaviour(target), new FleeBehaviour(enemy.transform, 1/distance));
-        // } else {
-        //     SetMovementBehaviours(clear: true, new SeekBehaviour(target));
-        // }
-        // if ((chara.GetHealth() < 3
-        //     || chara.GetHunger() < 7) && chara.FoodBag.Count != 0) {
-        //     EatFood(chara.FoodBag[0]);
-        // }
+        if (objectsInRange.Count > 0 && target == null) {
+            closest(objectsInRange);
+            target = objectsInRange[0];
+        } else if(target != null && !objectsInRange.Find(x => x == target)) {
+            target = null;
+
+        } else {
+            SetMovementBehaviours(true, new WanderBehaviour(1.4f, 2f, 4f, 2f));
+        }
+        if (enemy && enemy.GetComponent<CharacterBehaviors>().IsDead) {
+            enemy = null;
+        }
+        List<Transform> enemies = objectsInRange.FindAll(x => x.gameObject.layer == LayerMask.NameToLayer("Player"));
+        if (enemies.Count > 0)
+        {
+            closest(enemies);
+            enemy = enemies[0].GetComponent<CharacterBehaviors>();
+            if (Vector2.Distance(transform.position, enemy.transform.position) <= chara.Weapon.Range && !enemy.IsDead)
+            {
+                Attack(enemy.GetComponent<CharacterBehaviors>());
+            }
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            SetMovementBehaviours(clear: true, new SeekBehaviour(target), new AvoidObstaclesBehaviour(.5f)/*, new FleeBehaviour(enemy.transform, 1/distance)*/);
+        } else {
+            SetMovementBehaviours(clear: true, new SeekBehaviour(target, 2f), new AvoidObstaclesBehaviour(.5f));
+        }
+        if ((chara.GetHealth() < 3
+            || chara.GetHunger() < 7) && chara.FoodBag.Count != 0) {
+            EatFood(chara.FoodBag[0]);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

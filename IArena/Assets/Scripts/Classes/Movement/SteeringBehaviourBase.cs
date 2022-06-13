@@ -12,7 +12,7 @@ namespace Core
         private Rigidbody2D rigid;
         [SerializeField] private List<Steering> steerings = new List<Steering>();
         private float maxAcceleration = 10f;
-        private float maxAngularAcceleration = 3f;
+        private float maxAngularAcceleration = 5f;
         private float drag = 1f;
 
         public float MaxAcceleration { get => maxAcceleration; set => maxAcceleration = value; }
@@ -31,10 +31,12 @@ namespace Core
         void FixedUpdate()
         {
             Vector3 acceleration = Vector3.zero;
+            float rotation = Mathf.Atan2(rigid.velocity.y, rigid.velocity.x) * Mathf.Rad2Deg;
             foreach (Steering behaviour in steerings)
             {
                 SteeringData steering = behaviour.GetSteering(this);
                 acceleration += steering.Linear * behaviour.GetWeight();
+                rotation += steering.Angular;
             }
             if (acceleration.magnitude > maxAcceleration)
             {
@@ -42,6 +44,10 @@ namespace Core
                 acceleration *= maxAcceleration;
             }
             rigid.AddForce(acceleration, ForceMode2D.Force);
+            if (rotation != 0)
+            {
+                rigid.rotation = Mathf.LerpAngle(transform.rotation.eulerAngles.z, rotation, MaxAngularAcceleration * Time.deltaTime);
+            }
         }
     }
 }

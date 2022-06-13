@@ -19,7 +19,10 @@ namespace Commands
         {
             if (self.IsDead) return;
             // deal damage
-            await self.Weapon.Attack(this);
+            if(!self.Weapon.Attacked){
+                self.Weapon.Attack(this);
+            }
+            return;
         }
 
         public void Undo()
