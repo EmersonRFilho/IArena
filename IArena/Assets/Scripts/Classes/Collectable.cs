@@ -1,6 +1,7 @@
 using UnityEngine;
 using Commands;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public abstract class Collectable : MonoBehaviour,ICollectable {
     
     // [SerializeField] private int value;
@@ -15,6 +16,7 @@ public abstract class Collectable : MonoBehaviour,ICollectable {
 
     protected virtual void Awake() {
         hitbox = GetComponent<Collider2D>();
+        if(!hitbox.isTrigger) hitbox.isTrigger = true;
     }
 
     // private void Collect(CollectCommand _command) {

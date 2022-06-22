@@ -34,6 +34,7 @@ public class BrainBase : MonoBehaviour {
 
     protected void SetMovementBehaviours(bool clear = true, params Steering[] behaviours) {
         if (chara.IsDead) return;
+        
         if (clear) movement.Steerings.Clear();
         foreach(Steering behaviour in behaviours) {
             movement.Steerings.Add(behaviour);

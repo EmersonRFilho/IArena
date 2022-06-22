@@ -11,12 +11,28 @@ public class DemoOneEnemy : BrainBase
     void Update()
     {
         GetVision();
+        EnemyRoutine();
+    }
+
+    void EnemyRoutine()
+    {
         // Find player in range
-        // player = objectsInRange;
-        // // When player gets in weapon range
-        // if ()
-        // {
-        //     // Attack player
-        // }
+        if(objectsInRange.Find(x => x.tag == "Player"))
+        {
+            player = objectsInRange.Find(x => x.tag == "Player").GetComponent<CharacterBehaviors>();
+        }
+        // When player gets in weapon range
+        if (player && Vector2.Distance(transform.position, player.transform.position) <= chara.Weapon.Range)
+        {
+            // Attack player
+            Attack(player);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Weapon") {
+            Collect(other.GetComponent<Weapon>());
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Commands
             if (self.IsDead) return;
             // deal damage
             if(!self.Weapon.Attacked){
-                self.Weapon.Attack(this);
+                await self.Weapon.Attack(this);
             }
             return;
         }

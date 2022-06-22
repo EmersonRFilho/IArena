@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  weapon: {fileID: 29773743786654554, guid: a4e647ed4f5a505489019e8e23e3947c, type: 3}
+  weapon: {fileID: 0}
   detectable:
     serializedVersion: 2
     m_Bits: 448
