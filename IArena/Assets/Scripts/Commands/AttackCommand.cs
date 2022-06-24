@@ -19,7 +19,7 @@ namespace Commands
         {
             if (self.IsDead) return;
             // deal damage
-            if(!self.Weapon.Attacked){
+            if(!self.Weapon.Attacked && Vector2.Distance(self.transform.position, target.transform.position) < self.Weapon.Range){
                 await self.Weapon.Attack(this);
             }
             return;

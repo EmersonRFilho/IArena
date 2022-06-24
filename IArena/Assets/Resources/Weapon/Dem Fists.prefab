@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 29773743786654554}
   m_Layer: 6
   m_Name: Dem Fists
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,5 +124,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   cooldown: 1
-  range: 0.5
+  range: 0.6
   attackTime: 1

@@ -15,7 +15,6 @@ public class MockAI: BrainBase {
             target = objectsInRange[0];
         } else if(target != null && !objectsInRange.Find(x => x == target)) {
             target = null;
-
         } else {
             SetMovementBehaviours(true, new WanderBehaviour(1.4f, 2f, 4f, 2f));
         }

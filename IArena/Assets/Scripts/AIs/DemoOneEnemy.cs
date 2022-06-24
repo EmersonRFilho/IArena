@@ -17,7 +17,7 @@ public class DemoOneEnemy : BrainBase
     void EnemyRoutine()
     {
         // Find player in range
-        if(objectsInRange.Find(x => x.tag == "Player"))
+        if(objectsInRange.Exists(x => x.tag == "Player"))
         {
             player = objectsInRange.Find(x => x.tag == "Player").GetComponent<CharacterBehaviors>();
         }
@@ -31,7 +31,7 @@ public class DemoOneEnemy : BrainBase
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Weapon") {
+        if(other.tag == "Weapon" && other.GetComponent<Weapon>().Damage > chara.Weapon.Damage) {
             Collect(other.GetComponent<Weapon>());
         }
     }

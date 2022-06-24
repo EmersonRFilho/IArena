@@ -51,7 +51,7 @@ public class Weapon : Collectable
             if (_command.Self.IsDead) return;
             _command.Target.SendMessage("TakeDamage", _command);
             print(_command.Self.name + " dealt damage to " + _command.Target.name);
-            AttackTimer();
+            await AttackTimer();
             //StartCoroutine("AttackTimer");
             await Task.Yield();
         }
