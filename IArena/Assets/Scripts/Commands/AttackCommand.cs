@@ -1,15 +1,19 @@
 using UnityEngine;
+using Managers;
+
 namespace Commands
 {
     public class AttackCommand : ICommand
     {
 
         CharacterBehaviors self, target;
+        LevelManager levelManager;
 
-        public AttackCommand(CharacterBehaviors self, CharacterBehaviors target)
+        public AttackCommand(CharacterBehaviors self, CharacterBehaviors target, LevelManager levelManager)
         {
             this.self = self;
             this.target = target;
+            this.levelManager = levelManager;
         }
 
         public CharacterBehaviors Self { get => self; }
@@ -17,9 +21,12 @@ namespace Commands
 
         public async void Execute()
         {
+            // death check
             if (self.IsDead) return;
+            // queueCheck
+            if (!levelManager.RemoveCommand(this)) return;
             // deal damage
-            if(!self.Weapon.Attacked && Vector2.Distance(self.transform.position, target.transform.position) < self.Weapon.Range){
+            if (!self.Weapon.Attacked && Vector2.Distance(self.transform.position, target.transform.position) < self.Weapon.Range){
                 await self.Weapon.Attack(this);
             }
             return;

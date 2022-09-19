@@ -1,4 +1,5 @@
-using Core;
+using Managers;
+
 namespace Commands
 {
     public class CollectCommand : ICommand
@@ -6,11 +7,13 @@ namespace Commands
 
         private CharacterBehaviors self;
         private Collectable item;
+        private LevelManager levelManager; 
 
-        public CollectCommand(CharacterBehaviors self, Collectable item)
+        public CollectCommand(CharacterBehaviors self, Collectable item, LevelManager levelManager)
         {
             this.self = self;
             this.item = item;
+            this.levelManager = levelManager;
         }
 
         public CharacterBehaviors Self { get => self; }
@@ -19,6 +22,7 @@ namespace Commands
         public void Execute()
         {
             if (self.IsDead) return;
+            if (!levelManager.RemoveCommand(this)) return;
             switch (item.Type)
             {
                 case Collectable.CollectableType.treasure:

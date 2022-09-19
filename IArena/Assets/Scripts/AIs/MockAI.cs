@@ -16,7 +16,7 @@ public class MockAI: BrainBase {
         } else if(target != null && !objectsInRange.Find(x => x == target)) {
             target = null;
         } else {
-            SetMovementBehaviours(true, new WanderBehaviour(1.4f, 2f, 4f, 2f));
+            SetMovementBehaviours(new WanderBehaviour(1.4f, 2f, 4f, 2f));
         }
         if (enemy && enemy.GetComponent<CharacterBehaviors>().IsDead) {
             enemy = null;
@@ -31,9 +31,9 @@ public class MockAI: BrainBase {
                 Attack(enemy.GetComponent<CharacterBehaviors>());
             }
             float distance = Vector2.Distance(transform.position, enemy.transform.position);
-            SetMovementBehaviours(clear: true, new SeekBehaviour(target), new AvoidObstaclesBehaviour(.5f)/*, new FleeBehaviour(enemy.transform, 1/distance)*/);
+            SetMovementBehaviours(new SeekBehaviour(target), new AvoidObstaclesBehaviour(.5f)/*, new FleeBehaviour(enemy.transform, 1/distance)*/);
         } else {
-            SetMovementBehaviours(clear: true, new SeekBehaviour(target, 2f), new AvoidObstaclesBehaviour(.5f));
+            SetMovementBehaviours(new SeekBehaviour(target, 2f), new AvoidObstaclesBehaviour(.5f));
         }
         if ((chara.GetHealth() < 3
             || chara.GetHunger() < 7) && chara.FoodBag.Count != 0) {

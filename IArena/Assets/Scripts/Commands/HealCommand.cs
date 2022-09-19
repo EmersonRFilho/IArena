@@ -1,4 +1,5 @@
 using UnityEngine;
+using Managers;
 
 namespace Commands
 {
@@ -6,11 +7,13 @@ namespace Commands
     {
         CharacterBehaviors self;
         Food food;
+        LevelManager levelManager;
 
-        public HealCommand(CharacterBehaviors self, Food food)
+        public HealCommand(CharacterBehaviors self, Food food, LevelManager levelManager)
         {
             this.self = self;
             this.food = food;
+            this.levelManager = levelManager;
         }
 
         public CharacterBehaviors Self { get => self; set => self = value; }
@@ -19,6 +22,7 @@ namespace Commands
         public void Execute()
         {
             if (self.IsDead) return;
+            if (!levelManager.RemoveCommand(this)) return;
             if (self.FoodBag.Contains(food)) {
                 self.SendMessage("RestoreHealth", this);
                 // food.SendMessage("Consume", this);

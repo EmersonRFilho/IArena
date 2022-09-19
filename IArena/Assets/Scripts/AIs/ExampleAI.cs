@@ -23,7 +23,8 @@ public class ExampleAI : BrainBase
         }
         else 
         {
-            SetMovementBehaviours(true, new SeekBehaviour(target));
+            // SetMovementBehaviours(new SeekBehaviour(target));
+            SetMovementBehaviours(new StraightLineBehaviour(90, 1));
         }
         if(target.tag == "Player")
         {

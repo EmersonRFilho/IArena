@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Commands;
+using Managers;
 
 public class CommandsTests
 {
@@ -13,6 +14,8 @@ public class CommandsTests
     private GameObject weaponObject;
     private GameObject foodObject;
     private GameObject equipObject;
+    private GameObject managerObject;
+    private LevelManager levelManager;
 
     [SetUp]
     public void Setup()
@@ -25,6 +28,8 @@ public class CommandsTests
         // playerBrain = playerObject.AddComponent<BrainBase>();
         playerObject = GameObject.Instantiate(Resources.Load<GameObject>("BaseObjects/PlayerBase"), new Vector3(0,0,0), Quaternion.identity);
         enemyObject = GameObject.Instantiate(Resources.Load<GameObject>("BaseObjects/PlayerBase"), new Vector3(1,0,0), Quaternion.identity);
+        managerObject = GameObject.Instantiate(new GameObject());
+        levelManager = managerObject.AddComponent<LevelManager>();
 
         //collectables
         treasureObject = GameObject.Instantiate(new GameObject());
@@ -58,7 +63,10 @@ public class CommandsTests
     [UnityTest]
     public IEnumerator CollectsTreasure()
     {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), treasureObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            treasureObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         // Use yield to skip a frame.
         yield return new WaitForSeconds(0.1f);
         // Use the Assert class to test conditions.
@@ -71,7 +79,10 @@ public class CommandsTests
     public IEnumerator CollectsWeapon()
     {
         weaponObject.transform.position = playerObject.transform.position;
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            weaponObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         // Use yield to skip a frame.
         yield return new WaitForEndOfFrame();
         // Use the Assert class to test conditions.
@@ -83,7 +94,10 @@ public class CommandsTests
     [UnityTest]
     public IEnumerator CollectsEquipment()
     {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), equipObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            equipObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         // Use yield to skip a frame.
         yield return new WaitForSeconds(0.1f);
         // Use the Assert class to test conditions.
@@ -95,7 +109,10 @@ public class CommandsTests
     [UnityTest]
     public IEnumerator CollectsFood()
     {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), foodObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            foodObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         // Use yield to skip a frame.
         yield return new WaitForSeconds(0.1f);
         // Use the Assert class to test conditions.
@@ -107,28 +124,40 @@ public class CommandsTests
     [UnityTest]
     public IEnumerator AttacksPlayer()
     {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            weaponObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         int maxHealth = enemyObject.GetComponent<CharacterBehaviors>().GetHealth();
         new AttackCommand(
             playerObject.GetComponent<CharacterBehaviors>(),
-            enemyObject.GetComponent<CharacterBehaviors>()).Execute();
+            enemyObject.GetComponent<CharacterBehaviors>(),
+            managerObject.GetComponent<LevelManager>()).Execute();
         yield return new WaitForFixedUpdate();
         Assert.Less(enemyObject.GetComponent<CharacterBehaviors>().GetHealth(), maxHealth);
     }
 
     [UnityTest]
     public IEnumerator SimultaneousAttacks() {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            weaponObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         int playerMaxHealth = playerObject.GetComponent<CharacterBehaviors>().GetHealth();
         GameObject fists = (GameObject) GameObject.Instantiate(Resources.Load("Weapons/Dem Fists"), enemyObject.transform.position, Quaternion.identity);
-        new CollectCommand(enemyObject.GetComponent<CharacterBehaviors>(), fists.GetComponent<Collectable>()).Execute();
-        int enemyMaxHealth = enemyObject.GetComponent<CharacterBehaviors>().GetHealth();
-        new AttackCommand(
-            playerObject.GetComponent<CharacterBehaviors>(),
-            enemyObject.GetComponent<CharacterBehaviors>()).Execute();
-        new AttackCommand(
+        levelManager.QueueCommand(new CollectCommand(
             enemyObject.GetComponent<CharacterBehaviors>(),
-            playerObject.GetComponent<CharacterBehaviors>()).Execute();
+            fists.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
+        int enemyMaxHealth = enemyObject.GetComponent<CharacterBehaviors>().GetHealth();
+        levelManager.QueueCommand(new AttackCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            enemyObject.GetComponent<CharacterBehaviors>(),
+            managerObject.GetComponent<LevelManager>()));
+        levelManager.QueueCommand(new AttackCommand(
+            enemyObject.GetComponent<CharacterBehaviors>(),
+            playerObject.GetComponent<CharacterBehaviors>(),
+            managerObject.GetComponent<LevelManager>()));
         yield return new WaitForFixedUpdate();
         Assert.Less(playerObject.GetComponent<CharacterBehaviors>().GetHealth(), playerMaxHealth);
         Assert.Less(enemyObject.GetComponent<CharacterBehaviors>().GetHealth(), enemyMaxHealth);
@@ -137,15 +166,25 @@ public class CommandsTests
     [UnityTest]
     public IEnumerator EatsFood()
     {
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), weaponObject.GetComponent<Collectable>()).Execute();
-        new AttackCommand(
+        levelManager.QueueCommand(new CollectCommand(
             playerObject.GetComponent<CharacterBehaviors>(),
-            playerObject.GetComponent<CharacterBehaviors>()).Execute();
+            weaponObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
+        levelManager.QueueCommand(new AttackCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            playerObject.GetComponent<CharacterBehaviors>(),
+            managerObject.GetComponent<LevelManager>()));
         yield return new WaitForFixedUpdate();
         int playerHealth = playerObject.GetComponent<CharacterBehaviors>().GetHealth();
-        new CollectCommand(playerObject.GetComponent<CharacterBehaviors>(), foodObject.GetComponent<Collectable>()).Execute();
+        levelManager.QueueCommand(new CollectCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            foodObject.GetComponent<Collectable>(),
+            managerObject.GetComponent<LevelManager>()));
         yield return new WaitForFixedUpdate();
-        new HealCommand(playerObject.GetComponent<CharacterBehaviors>(), foodObject.GetComponent<Food>()).Execute();
+        levelManager.QueueCommand(new HealCommand(
+            playerObject.GetComponent<CharacterBehaviors>(),
+            foodObject.GetComponent<Food>(),
+            managerObject.GetComponent<LevelManager>()));
         // Use yield to skip a frame.
         yield return new WaitForSeconds(0.1f);
         // Use the Assert class to test conditions.
