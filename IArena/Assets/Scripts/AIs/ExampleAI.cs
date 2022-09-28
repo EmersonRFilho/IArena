@@ -23,13 +23,14 @@ public class ExampleAI : BrainBase
         }
         else 
         {
-            // SetMovementBehaviours(new SeekBehaviour(target));
-            SetMovementBehaviours(new StraightLineBehaviour(90, 1));
+            // SetMovementBehaviours(new PursueBehaviour(target, 1));
+            SetMovementBehaviours(new SeekBehaviour(target));
+            // SetMovementBehaviours(new StraightLineBehaviour(90, 1));
         }
-        if(target.tag == "Player")
-        {
-            Attack(target.GetComponent<CharacterBehaviors>());
-        }
+        // if(target.tag == "Player")
+        // {
+        //     Attack(target.GetComponent<CharacterBehaviors>());
+        // }
         if(chara.GetHealth() <= 5 && chara.FoodBag.Count > 0)
         {
             EatFood(chara.FoodBag[0]);

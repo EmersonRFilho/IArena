@@ -1,4 +1,5 @@
 using Managers;
+using UnityEngine;
 
 namespace Commands
 {
@@ -40,6 +41,9 @@ namespace Commands
                 case Collectable.CollectableType.weapon:
                     // self.addScore(item.GetComponent<Weapon>());
                     self.SendMessage("CollectWeapon", this);
+                    break;
+                case Collectable.CollectableType.other:
+                    item.SendMessage("Collect");
                     break;
                 default:
                     break;

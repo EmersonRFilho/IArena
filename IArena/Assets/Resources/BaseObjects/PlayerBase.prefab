@@ -210,7 +210,7 @@ MonoBehaviour:
   weapon: {fileID: 0}
   detectable:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 1984
 --- !u!114 &4099413190448826627
 MonoBehaviour:
   m_ObjectHideFlags: 0

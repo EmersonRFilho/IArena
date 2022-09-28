@@ -24,6 +24,7 @@ public class Equipment : Collectable
     {
         transform.position = _command.Self.transform.position;
         gameObject.SetActive(true);
+        hitbox.enabled = true;
     }
 
     public enum IncreasesStat {

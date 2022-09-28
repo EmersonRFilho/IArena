@@ -72,6 +72,7 @@ namespace Core{
         }
 
         private void StoreFood(CollectCommand _command) {
+            if(!_command.Item.GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) return;
             foodBag.Add((Food) _command.Item);
         }
 
@@ -96,6 +97,7 @@ namespace Core{
         }
 
         private void CollectWeapon(CollectCommand _command) {
+            // if(!_command.Item.GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) return;
             if(weapon){
                 // weapon.SendMessage("Drop", _command);
                 weapon.Drop(_command);

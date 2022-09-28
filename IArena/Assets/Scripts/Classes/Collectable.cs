@@ -19,15 +19,6 @@ public abstract class Collectable : MonoBehaviour,ICollectable {
         if(!hitbox.isTrigger) hitbox.isTrigger = true;
     }
 
-    // private void Collect(CollectCommand _command) {
-    //     gameObject.SetActive(false);
-    // }
-
-    // private void Drop(CollectCommand _command) {
-    //     transform.position = _command.Self.transform.position;
-    //     gameObject.SetActive(true);
-    // }
-
     protected void setType(CollectableType type) {
         this.type = type;
     }
@@ -37,7 +28,8 @@ public abstract class Collectable : MonoBehaviour,ICollectable {
         treasure,
         weapon,
         food,
-        equipment
+        equipment,
+        other
     }
 
 
