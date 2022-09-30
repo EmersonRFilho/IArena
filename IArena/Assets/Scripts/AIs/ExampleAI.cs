@@ -6,12 +6,21 @@ using Movement;
 public class ExampleAI : BrainBase
 {
     Transform target;
+    Transform hazard;
 
     // Update is called once per frame
     void Update()
     {
         GetVision();
         SortClosest(objectsInRange);
+        foreach (Transform item in objectsInRange)
+        {
+            if(item.gameObject.layer == LayerMask.NameToLayer("Hazard"))
+            {
+                hazard = item;
+                break;
+            }
+        }
         if(!target && objectsInRange.Count > 0)
         {
             target = objectsInRange[0];
@@ -20,12 +29,26 @@ public class ExampleAI : BrainBase
                 objectsInRange.Remove(target);
                 target = objectsInRange[0];
             }
+            if(target.tag == "Hazard")
+            {
+                target = null;
+            }
         }
         else 
         {
             // SetMovementBehaviours(new PursueBehaviour(target, 1));
-            SetMovementBehaviours(new SeekBehaviour(target));
+            SetMovementBehaviours(
+                new SeekBehaviour(target, 1/Vector2.Distance(transform.position, target.position)), 
+                new AvoidObstaclesBehaviour(0.3f)
+            );
             // SetMovementBehaviours(new StraightLineBehaviour(90, 1));
+            // SetMovementBehaviours(new WanderBehaviour(0.2f, 2, 3, 1));
+        }
+        if(hazard && !target)
+        {
+            SetMovementBehaviours(
+                new FleeBehaviour(hazard, 1/Vector2.Distance(transform.position, hazard.position)), 
+                new AvoidObstaclesBehaviour(0.5f));
         }
         // if(target.tag == "Player")
         // {

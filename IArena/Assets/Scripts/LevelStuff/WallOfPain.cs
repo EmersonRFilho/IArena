@@ -10,7 +10,6 @@ namespace LevelElements
         LevelManager levelManager;
         [SerializeField] SteeringBehaviourBase movement;
         [SerializeField] float maxAcceleration;
-        bool moving = false;
 
         private void Start()
         {
@@ -25,7 +24,7 @@ namespace LevelElements
 
         public void StartMoving()
         {
-            // moving = !moving;
+            gameObject.SetActive(true);
             movement.Steerings.Clear();
             movement.Steerings.Add(new StraightLineBehaviour(180, 1));
         }

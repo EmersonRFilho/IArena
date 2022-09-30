@@ -5,12 +5,19 @@ using UnityEngine;
 
 namespace Movement
 {
+    /// <summary>
+    /// Movement behaviour in which the object avoids anything on the layer "Terrain"
+    /// </summary>
     public class AvoidObstaclesBehaviour : Steering
     {
         private float avoidDistance = 2f;
         private float lookAhead = 2f;
         private float sideViewAngle = 45f;
 
+        /// <summary>
+        /// Movement Behaviour in which the object avoids anything on the layer "Terrain"
+        /// </summary>
+        /// <param name="weight">How much should this behaviour affect overall movement</param>
         public AvoidObstaclesBehaviour(float weight = 1f) {
             this.weight = weight;
         }

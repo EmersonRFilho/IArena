@@ -5,6 +5,9 @@ using Movement;
 using Core;
 using Managers;
 
+/// <summary>
+/// Any player object must inherit from this class in order to function properly.
+/// </summary>
 [RequireComponent(typeof(CharacterBehaviors))]
 [RequireComponent(typeof(SteeringBehaviourBase))]
 public class BrainBase : MonoBehaviour {
@@ -20,6 +23,10 @@ public class BrainBase : MonoBehaviour {
         movement.MaxAcceleration = chara.GetSpeed();
     }
 
+    /// <summary>
+    /// Returns all detectable transforms in a list called objectsInRange
+    /// which can be accessed by the object and manipulated as you please.
+    /// </summary>
     protected void GetVision() {
         if (chara.IsDead) return;
         objectsInRange.Clear();
@@ -35,6 +42,13 @@ public class BrainBase : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Updates object's movement list.
+    /// </summary>
+    /// <param name="behaviours">
+    /// MovementBehaviour object that the object will perform,
+    /// you may pass as many as you like at once.
+    /// </param>
     protected void SetMovementBehaviours(params Steering[] behaviours) {
         if (chara.IsDead) return;
         
@@ -44,6 +58,13 @@ public class BrainBase : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Collects a Collectable object and stores it depending on the type o collectable
+    /// Food objects will go to the FoodBag
+    /// Treasures and Equipment will go to the BackPack
+    /// Weapons will go to the Weapon slot, picking a new one drops the current Weapon
+    /// </summary>
+    /// <param name="item"></param>
     protected void Collect(Collectable item) {
         if (chara.IsDead) return;
         CollectCommand command = new CollectCommand(chara, item, levelManager);
@@ -53,6 +74,11 @@ public class BrainBase : MonoBehaviour {
         // command.Execute();
     }
 
+    /// <summary>
+    /// Consumes a food from your FoodBag.
+    /// A Food restores health and lessens hunger.
+    /// </summary>
+    /// <param name="food">A Food object from your FoodBag</param>
     protected void EatFood(Food food) {
         if (chara.IsDead) return;
         HealCommand command = new HealCommand(chara, food, levelManager);
@@ -62,6 +88,10 @@ public class BrainBase : MonoBehaviour {
         command.Execute();
     }
 
+    /// <summary>
+    /// Attacks another Character when in weapon range.
+    /// </summary>
+    /// <param name="target">Character that will receive the attack.</param>
     protected void Attack(CharacterBehaviors target) {
         if (chara.IsDead) return;
         AttackCommand command = new AttackCommand(chara, target, levelManager);

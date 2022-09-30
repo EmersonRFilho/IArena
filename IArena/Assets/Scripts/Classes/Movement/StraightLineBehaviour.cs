@@ -3,11 +3,29 @@ using Core;
 
 namespace Movement
 {
+    /// <summary>
+    /// Movement behaviour in which, given an angle, object will move in that direction.
+    /// For reference:
+    /// 0 = right;
+    /// 90 = up;
+    /// 180 = left;
+    /// 270 = down.
+    /// </summary>
     [System.Serializable]
     public class StraightLineBehaviour : Steering
     {
         private float angle;
 
+        /// <summary>
+        /// Movement behaviour in which, given an angle, object will move in that direction.
+        /// For reference:
+        /// 0 = right;
+        /// 90 = up;
+        /// 180 = left;
+        /// 270 = down.
+        /// </summary>
+        /// <param name="angle">The angle in degrees representing the direction object will move</param>
+        /// <param name="weight">How much should this behaviour affect overall movement</param>
         public StraightLineBehaviour(float angle, float weight)
         {
             this.angle = angle;

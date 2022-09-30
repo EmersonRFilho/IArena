@@ -2,6 +2,9 @@ using Core;
 using UnityEngine;
 
 namespace Movement {
+    /// <summary>
+    /// Movement behaviour in which object will move around aimlessly
+    /// </summary>
     public class WanderBehaviour : Steering
     {
         private float wanderRate = 0.4f;
@@ -10,6 +13,14 @@ namespace Movement {
         private float wanderOrientation = 0f;
         Vector3 targetPosition;
 
+        /// <summary>
+        /// Movement behaviour in which object will move around aimlessly.
+        /// It basicaly creates a circle where any point in it can be a target;
+        /// </summary>
+        /// <param name="wanderRate">How much should object change directions</param>
+        /// <param name="wanderOffset">How far away is the circle from object (Closer = more variation in direction)</param>
+        /// <param name="wanderRadius">How big is the circle</param>
+        /// <param name="weight">How much should this behaviour affect overall movement</param>
         public WanderBehaviour(float wanderRate, float wanderOffset, float wanderRadius, float weight)
         {
             this.wanderRate = wanderRate;

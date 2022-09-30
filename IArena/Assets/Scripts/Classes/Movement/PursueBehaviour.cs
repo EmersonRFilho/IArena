@@ -3,11 +3,19 @@ using UnityEngine;
 
 namespace Movement
 {
+    /// <summary>
+    /// Movement behaviour in which object moves towards a target transform in order to intercept it
+    /// </summary>
     [System.Serializable]
     public class PursueBehaviour : Steering
     {
         private float maxPrediction = 2f;
         private Transform target;
+        /// <summary>
+        /// Movement behaviour in which object moves towards a target transform in order to intercept it
+        /// </summary>
+        /// <param name="target">The transform object will try to intercept</param>
+        /// <param name="weight">How much should this behaviour affect overall movement</param>
         public PursueBehaviour(Transform target, float weight)
         {
             this.target = target;

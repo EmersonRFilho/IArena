@@ -3,10 +3,18 @@ using Core;
 
 namespace Movement
 {
+    /// <summary>
+    /// Movement behaviour in which an object moves away from a target transform
+    /// </summary>
     public class FleeBehaviour : Steering
     {
         private Transform target;
 
+        /// <summary>
+        /// Movement behaviour in which an object moves away from a target transform
+        /// </summary>
+        /// <param name="target">The transform the object should flee from</param>
+        /// <param name="weight">How much should this behaviour affect overall movement</param>
         public FleeBehaviour(Transform target, float weight = 1f)
         {
             this.target = target;
