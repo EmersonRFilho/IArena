@@ -50,10 +50,10 @@ public class ExampleAI : BrainBase
                 new FleeBehaviour(hazard, 1/Vector2.Distance(transform.position, hazard.position)), 
                 new AvoidObstaclesBehaviour(0.5f));
         }
-        // if(target.tag == "Player")
-        // {
-        //     Attack(target.GetComponent<CharacterBehaviors>());
-        // }
+        if(target.tag == "Player")
+        {
+            Attack(target.GetComponent<CharacterBehaviors>());
+        }
         if(chara.GetHealth() <= 5 && chara.FoodBag.Count > 0)
         {
             EatFood(chara.FoodBag[0]);
@@ -71,6 +71,9 @@ public class ExampleAI : BrainBase
 
     void SortClosest(List<Transform> list)
     {
-        list.Sort((obj1, obj2) => Vector2.Distance(transform.position, obj1.position).CompareTo(Vector2.Distance(transform.position, obj2.position)));
+        list.Sort(
+            (obj1, obj2) => Vector2.Distance(transform.position, obj1.position)
+            .CompareTo(Vector2.Distance(transform.position, obj2.position))
+        );
     }
 }
