@@ -1,0 +1,5 @@
+Nesta fase o personagem (circulo branco no centro da cena), deve andar e ativar todos os checkpoints assim que encostar em seus colliders.
+
+Dicas:
+1- Não existe uma ordem correta para ativar os checkpoints.
+2- Lembre-se que é preciso mudar de alvo ao ativar um checkpoint.

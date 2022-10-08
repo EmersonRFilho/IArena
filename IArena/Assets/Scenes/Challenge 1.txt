@@ -1,0 +1,5 @@
+Nesta fase o personagem (circulo branco do lado esquerdo da cena), deve andar e ativar o checkpoint assim que encostar em seu collider.
+
+Dicas:
+1- É possível detectar colisões usando a função OnTriggerEnter2D()
+2- Vc pode usar layers ou tags para certificar que o personagem encostou no tipo de objeto desejado.

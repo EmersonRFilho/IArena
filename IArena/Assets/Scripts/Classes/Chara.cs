@@ -47,7 +47,7 @@ namespace Core{
                 if (hungerTimer > 10) {
                     hungerTimer = 0f;
                     stats.Eat(-1);
-                    print(stats.Hunger);
+                    print("Hunger level:" + stats.Hunger);
                 }
             } else {
                 KillPlayer();
@@ -72,7 +72,7 @@ namespace Core{
         }
 
         private void StoreFood(CollectCommand _command) {
-            if(!_command.Item.GetComponent<Collider2D>().IsTouching(_command.Self.GetComponent<Collider2D>())) return;
+            // if(!_command.Self.GetComponent<Collider2D>().IsTouching(_command.Item.GetComponent<Collider2D>())) return;
             foodBag.Add((Food) _command.Item);
         }
 

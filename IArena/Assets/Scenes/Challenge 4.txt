@@ -1,0 +1,5 @@
+Nesta fase o personagem, deve coletar todas as maçãs da fase e não morrer no processo.
+
+Dicas:
+1- É possível passar mais de um comportamento de movimentação em SetMovementBehaviours
+2- Talves você não queira que um desses comportamentos influenciem muito na movimentação geral.

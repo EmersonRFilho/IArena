@@ -9,12 +9,15 @@ namespace Commands
         private CharacterBehaviors self;
         private Collectable item;
         private LevelManager levelManager; 
+        private Collider2D selfCollider, itemCollider;
 
         public CollectCommand(CharacterBehaviors self, Collectable item, LevelManager levelManager)
         {
             this.self = self;
             this.item = item;
             this.levelManager = levelManager;
+            this.selfCollider = self.GetComponent<Collider2D>();
+            this.itemCollider = item.GetComponent<Collider2D>();
         }
 
         public CharacterBehaviors Self { get => self; }
@@ -24,6 +27,8 @@ namespace Commands
         {
             if (self.IsDead) return;
             if (!levelManager.RemoveCommand(this)) return;
+            // if(!self.gameObject.GetComponent<Collider2D>().IsTouching(item.gameObject.GetComponent<Collider2D>())) return;
+            if(!selfCollider.bounds.Intersects(itemCollider.bounds)) return;
             switch (item.Type)
             {
                 case Collectable.CollectableType.treasure:

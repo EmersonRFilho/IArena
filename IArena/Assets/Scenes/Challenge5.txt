@@ -1,0 +1,5 @@
+Um oponente está à vista, equipe-se adequadamente e derrote-o em um combate.
+
+Dicas:
+1- Itens coletados são armazenados em uma lista correspondente ao seu tipo, mas não tem como guardar armas assim.
+2- Não deseje morte ao seu oponente, viva mais que ele.

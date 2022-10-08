@@ -36,7 +36,7 @@ namespace Movement
             for (int i = 0; i < rayVector.Length; i++) {
                 LayerMask mask = LayerMask.GetMask("Terrain");
                 RaycastHit2D hit = Physics2D.Raycast(steeringBase.transform.position, rayVector[i], lookAhead, mask);
-                MonoBehaviour.print("Raycasting");
+                // MonoBehaviour.print("Raycasting");
                 if (hit.collider) {
                     MonoBehaviour.print("obstacle found: " + hit.collider.name);
                     Vector3 target = hit.point + (hit.normal * avoidDistance);

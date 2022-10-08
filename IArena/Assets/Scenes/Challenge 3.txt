@@ -1,0 +1,4 @@
+Nesta fase o personagem (circulo branco no centro inferior da cena), deve encostar no personagem azul antes que este saia da cena.
+
+Dicas:
+1- Tente explorar os tipos de movimentação que podem ser usados.
